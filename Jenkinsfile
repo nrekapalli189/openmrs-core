@@ -146,5 +146,27 @@ pipeline {
 				  version: nexus_version
 		  }
 	  }
-	  ]
+  }
+	post {
+		always {
+			script
+			{
+				def status = currentBuild.currentResult == 'SUCCESS' ? 'SUCCESS' : 'Fail'
+				Map jiramap = [
+					"projectkey" : "CCDTRA",
+					"ENVIRONMENT" : "Build",
+					"status" : status,
+					"JIRA_KEY" : "${env.JIRA_KEY}",
+					'AAPP_VERSION' : nexus_version,
+					'CommitID' : gitInfo.GIT_COMMIT,
+					'Nexus Artifct ID':artifactId,
+					'Nexus Group ID':groupId,
+					'Repo URL': gitInfo.GIT_URL,
+					'addComment':"Build Status: " +status
+					]
+				updateJiraTicket(jiramap)
+				deleteDir() /* clean up our workspace */
+			}
+		}
+	}
 			  
