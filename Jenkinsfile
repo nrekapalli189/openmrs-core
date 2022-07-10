@@ -136,4 +136,15 @@ pipeline {
 				  protocol: 'https',
 				  repository: 'CCDT',
 				  version: nexus_version
+			  nexusArtifactUploader artifacts: [[artifctId: "deploymentProperties", file: "${WORKSPACE}/deploymentProperties.zip", type: 'zip']],
+				  credentialsId: 'nexusArtifactUploader',
+				  groupId: groupId,
+				  nexusUrl: 'nexusscimgmt.sgp.dbs.com:8443/nexus',
+				  nexusVersion: 'nexus3',
+				  protocol: 'https',
+				  repository: 'CCDT',
+				  version: nexus_version
+		  }
+	  }
+	  ]
 			  
