@@ -112,4 +112,20 @@ pipeline {
 		  }
 	  }
 	  
-	  
+	  stage('Fortify Scan') {
+		  steps {
+			  script {
+				  Map mp = [ commitID: gitInfo.GIT_COMMIT,
+							branch: gitInfo.GIT_BRANCH,
+							repourl: gitInfo.GIT_URL,
+							fortifyProjectName: "${env.APPCODE}",
+							fortifyVersionName: "{env.APPCODE}_ccdscore",
+							buildCommand: "mvn -f pom.xml -U clean install -Dmaven.test.skip=true"
+							]
+				  performFortifyScan(mp)
+			  }
+		  }
+	  }
+	  stage('Upload Package to Nexus repo') {
+		  steps {
+			  
