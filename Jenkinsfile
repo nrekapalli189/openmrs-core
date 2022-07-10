@@ -128,4 +128,12 @@ pipeline {
 	  }
 	  stage('Upload Package to Nexus repo') {
 		  steps {
+			  nexusArtifactUploader artifacts: [[artifactId: artifactId, classifier: '', file: "{WORKSPACE}/ccdscore.zip", type: 'zip']],
+				  credentialsId: 'nexusArtifactUploader',
+				  groupId: groupId,
+				  nexusUrl: 'nexusscimgmt.sgp.dbs.com:8443/nexus',
+				  nexusVersion: 'nexus3',
+				  protocol: 'https',
+				  repository: 'CCDT',
+				  version: nexus_version
 			  
