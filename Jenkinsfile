@@ -40,4 +40,28 @@ pipeline {
     }
     
     stage('Build with maven') {
-      
+		steps {
+			script {
+				sh '''
+				pwd
+				mvn -f pom.xml -U clean install -Dmaven.test.skip=true
+				ls -ltr
+			mkdir -p ccdscore
+			mkdir -p ccdscore/ccdt_DB_SQL
+			mkdir -p ccdscore/properties
+			test -f ./target/ccds.war && co ./target/ccds.war ccdscore
+			ls -ld ${WORKSPACE}/ccdt_DB_SQL
+			cp -R ${WORKSPACE}/ccdt_DB_SQL ccdscore/
+			ls -ld ${WORKSPACE}/properties
+			ls -ld ${WORKSPACE}/properties ccdscore/
+			zip -r ccdscore.zip ccdscore/
+			pwd
+			ls -lrt
+			cd ${WORKSPACE}/deploymentProperties
+			zip -r ${WORKSPACE}/deploymentProperties.zip *
+			ls -lrt
+			'''
+			}
+		}
+	}
+	  
