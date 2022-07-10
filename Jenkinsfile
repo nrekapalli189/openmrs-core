@@ -1,6 +1,6 @@
 #!groovy
 def artifactId="ccdscore"
-def groupId=com.dbs.cct"
+def groupId=com.dbs.ccdt"
 //def gitrepourl = ""
 def gitInfo = {}
 
@@ -99,7 +99,7 @@ pipeline {
 						   branch: gitInfo.GIT_BRANCH,
 						   repourl: gitInfo.GIT_URL,
 						   "sonar.projectKey": "CCDT_ccdsCore",
-						   "sonar.projectName": "CCDT_ccdScore",
+						   "sonar.projectName": "CCDT_ccdsCore",
 						   "sonar.sources": "src",
 						   "sonar.exclusions": "**/*.jpg",
 						   "sonar.java.binaries": ".",
@@ -131,7 +131,7 @@ pipeline {
 			  nexusArtifactUploader artifacts: [[artifactId: artifactId, classifier: '', file: "{WORKSPACE}/ccdscore.zip", type: 'zip']],
 				  credentialsId: 'nexusArtifactUploader',
 				  groupId: groupId,
-				  nexusUrl: 'nexusscimgmt.sgp.dbs.com:8443/nexus',
+				  nexusUrl: 'nexuscimgmt.sgp.dbs.com:8443/nexus',
 				  nexusVersion: 'nexus3',
 				  protocol: 'https',
 				  repository: 'CCDT',
@@ -170,3 +170,5 @@ pipeline {
 		}
 	}
 			  
+}
+}
