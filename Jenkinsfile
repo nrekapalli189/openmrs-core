@@ -65,3 +65,31 @@ pipeline {
 		}
 	}
 	  
+	  stage('Nexus IQ Scan') {
+		  steps {
+			  script {
+				  Map mp = [ commitID: gitInfo.GIT_COMMIT,
+							branch: gitInfo.GIT_BRANCH,
+							repourl: gitInfo.GIT_URL,
+							iqProjectName: "${env.APPCODE}_${REPONAME}",
+							mailto: "rameshbabu@dbs.com, nagabhushanamr@dbs.com",
+							organization: "MAS_or_External",
+							appCategory: "Hosted"
+							]
+				  performIQScan(mp)
+			  }
+		  }
+	  }
+	  stage('UnitTest') {
+		  steps {
+			  sh "mvn install -f pom.xml"
+			  sh "cd tools; java PostCSVToConfluence ../ccdscore/target/jacoco-ut/jacoco.csv"
+			  sh "ant -lib ./unittest -f build.xml uploadCoverageReport"
+		  }
+	  }
+	  stage ('Jacoco') {
+		  steps {
+			  sh "ls -l ./target"
+		  }
+	  }
+	  
