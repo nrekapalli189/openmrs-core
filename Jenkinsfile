@@ -92,4 +92,24 @@ pipeline {
 			  sh "ls -l ./target"
 		  }
 	  }
+	  stage ("Sonar Scan") {
+		  steps{
+			  script {
+				  Map mp =[commitID: gitInfo.GIT_COMMIT,
+						   branch: gitInfo.GIT_BRANCH,
+						   repourl: gitInfo.GIT_URL,
+						   "sonar.projectKey": "CCDT_ccdsCore",
+						   "sonar.projectName": "CCDT_ccdScore",
+						   "sonar.sources": "src",
+						   "sonar.exclusions": "**/*.jpg",
+						   "sonar.java.binaries": ".",
+						   "sonar.branch.name": gitInfo.GIT_BRANCH,
+						   "sonar.junit.reportPaths": "target/surefire-reports",
+						   qualityGateCheck: false
+						   ]
+				  peformSonarScan(mp)
+			  }
+		  }
+	  }
+	  
 	  
